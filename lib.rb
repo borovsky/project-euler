@@ -23,9 +23,9 @@ def proper_divisors(n)
   d + dd.reverse.map {|i| n/i }
 end
 
+@factorial = {1 => 1, 0 => 1}
 def factorial(n)
-  return 1 if n<2
-  n * factorial(n-1)
+  @factorial[n] || @factorial[n] = n * factorial(n-1)
 end
 
 module Enumerable
@@ -130,6 +130,10 @@ class Array
     }
     n
   end
+
+  def shuffle
+    sort_by { rand }
+  end
 end
 
 class Numeric
@@ -138,7 +142,7 @@ class Numeric
     to_s.each_byte.map{|i| i - zero}
   end
 
-  def prime?(primes = [])
+  def mprime?(primes = [])
     return true if self == 2
     return false if self < 2
     return false if self % 2 == 0
@@ -167,18 +171,35 @@ class Numeric
     s = Math.sqrt(self).round
     (s * s > self) ? (s - 1) : s
   end
+
+  def prime_dividers(primes)
+    n = self
+    d = []
+    primes.each do |p|
+      d << p if n % p == 0
+      n /= p while n % p == 0
+      return d if n == 1
+    end
+    p [n, self]
+    return d
+  end
 end
 
 def primes_to(max)
-  simples = [2]
-  s = 3
+  primes_file_name = "primes.#{max}"
+  return Marshal.load(File.read(primes_file_name)) if File.exists?(primes_file_name)
+  primes = [2, 3, 5]
+  s = 6
   while(s < max) do
-    unless simples.find {|i| s % i == 0}
-      simples << s
-    end
-    s += 2
+    primes << (s+1) if (s+1).mprime?()
+    primes << (s+5) if (s+5).mprime?()
+    s += 6
+    p s if s % 10000 == 0
   end
-  simples
+  File.open(primes_file_name, "w") do |f|
+    f.write(Marshal.dump(primes))
+  end
+  primes
 end
 
 
@@ -190,7 +211,8 @@ def assert_eq(a, b, message = "Error: #{a.inspect} != #{b.inspect}")
   raise message unless a == b
 end
 
-def nod(a, b)
+def gcd(a, b)
+  return 1 if b == 1
   n = a % b
-  n == 0 ? a : nod(b, a % b)
+  n == 0 ? a : gcd(b, a % b)
 end
