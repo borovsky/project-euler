@@ -3,8 +3,6 @@ require './lib.rb'
 def count_triangles(len)
   count = Hash.new(0)
 
-  sl = Math.sqrt(len).round
-
   n = 2
   while(n * n < len)
     m = 1

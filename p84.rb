@@ -98,7 +98,7 @@ def calc_top_probabilities(sum)
       pos = calc_new_pos((pos + r[0] + r[1]) % BOARD.length)
       prob[pos] += 1
 
-      if r[0] -- r[1]
+      if r[0] == r[1]
         r = roll(sum)
         if(r[0] == r[1])
           pos = JAIL_POS

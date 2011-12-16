@@ -180,7 +180,19 @@ class Numeric
       n /= p while n % p == 0
       return d if n == 1
     end
-    p [n, self]
+    return d
+  end
+
+  def prime_dividers_not_uniq(primes)
+    n = self
+    d = []
+    primes.each do |p|
+      while n % p == 0
+        d << p
+        n /= p 
+      end
+      return d if n == 1
+    end
     return d
   end
 end
@@ -191,8 +203,8 @@ def primes_to(max)
   primes = [2, 3, 5]
   s = 6
   while(s < max) do
-    primes << (s+1) if (s+1).mprime?()
-    primes << (s+5) if (s+5).mprime?()
+    primes << (s+1) if (s+1).mprime?(primes)
+    primes << (s+5) if (s+5).mprime?(primes)
     s += 6
     p s if s % 10000 == 0
   end
