@@ -87,14 +87,18 @@ class Array
   def next_perm
     l = length - 1
     # 1) search for first order fail
-    l -= 1 while l>0 and self[l-1] >= self[l]
+    l -= 1 while l > 0 and self[l-1] >= self[l]
     return nil if l == 0
 
     # 2) search for element, that directly bigger than current
     tst = self[l-1]
     idx = l
     idx += 1 while idx < length and tst <= self[idx]
-    swap(l-1, idx-1)
+    if idx > length && tst > self[idx]
+      swap(l-1, idx-1)
+    else
+      swap(l-1, l)
+    end
 
     # 3) sort to end
     r = length - 1
@@ -226,5 +230,5 @@ end
 def gcd(a, b)
   return 1 if b == 1
   n = a % b
-  n == 0 ? a : gcd(b, a % b)
+  n == 0 ? b : gcd(b, a % b)
 end

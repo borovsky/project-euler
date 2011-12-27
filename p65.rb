@@ -21,7 +21,6 @@ def calc_diff(s)
 end
 
 def res(n)
-  p calc_diff([2] + seq(n - 1))[0]
   calc_diff([2] + seq(n - 1))[0].digits.reduce(0, :+)
 end
 
